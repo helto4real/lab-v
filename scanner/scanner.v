@@ -2,6 +2,11 @@ module scanner
 
 import token
 
+const (
+	single_quote = `\'`
+	double_quote = `"`
+)
+
 pub struct Scanner {
 pub mut:
 	text	string
@@ -56,8 +61,14 @@ pub fn (mut s Scanner) scan_next_token() token.Token
 			return s.token_lcbr()
 		} else if c == `}` {
 			return s.token_rcbr()
-		} else {
-			return s.token_unknown()
+		}
+		
+		match c {
+			single_quote, double_quote {
+				ident_string := s.ident_string()
+				return s.token_string(ident_string)
+			}
+			else{}
 		}
 	}
 	return s.token_unknown()
@@ -98,4 +109,26 @@ fn (mut s Scanner) ident_name() string {
 	name := s.text[start..s.pos]
 	s.pos--
 	return name
+}
+
+fn (mut s Scanner) ident_string() string {
+	mut q := s.text[s.pos]
+	start_pos := s.pos+1
+	q_char := q
+	for {
+		s.pos++
+		if s.pos >= s.text.len {
+			// s.error('unfinished string literal')
+			break
+		}
+		q = s.text[s.pos]
+		if q == q_char {
+			if start_pos != s.pos {
+				return s.text[start_pos..s.pos]
+			} else {
+				return ''
+			}
+		}
+	}
+	return ''
 }

@@ -77,3 +77,17 @@ fn test_scan_fn_main() {
 	assert s.tokens[5].kind == .rcbr
 	assert s.tokens[5].lit == '}'
 }
+
+fn test_scan_single_qoute_literal() {
+	mut s := new_from_text("'hello world'")
+	t := s.scan_next_token()
+	assert t.kind == .string
+	assert t.lit == 'hello world'
+}
+
+fn test_scan_double_qoute_literal() {
+	mut s := new_from_text('"hello world"')
+	t := s.scan_next_token()
+	assert t.kind == .string
+	assert t.lit == 'hello world'
+}

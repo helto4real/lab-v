@@ -1,6 +1,14 @@
 module parser 
 import ast
 
+fn (mut p Parser) call_expr(mod string) ast.CallExpr {
+
+	return ast.CallExpr{left: ast.Unknown{}}
+}
+
+// fn_decl parses function declarations
+// Examples:
+//	- fn main() {}
 fn (mut p Parser) fn_decl() ast.FnDecl {
 	// start_pos := p.tok.position()
 	p.scan_next_token()

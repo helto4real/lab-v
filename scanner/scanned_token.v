@@ -30,6 +30,9 @@ fn (mut s Scanner) token_rpar() token.Token {
 fn (mut s Scanner) token_name(name string) token.Token {
 	return s.new_token(.name, name, name.len)
 }
+fn (mut s Scanner) token_string(lit string) token.Token {
+	return s.new_token(.string, lit, lit.len) // + two quotes 
+}
 
 fn (mut s Scanner) token_keyword(kind token.Kind, lit string) token.Token {
 	return s.new_token(kind, lit, lit.len)

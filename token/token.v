@@ -11,6 +11,7 @@ pub mut:
 pub enum Kind {
 	name
 	number
+	string
 	lcbr
 	rcbr
 	lpar
@@ -43,6 +44,8 @@ fn build_token_str() []string {
 	s[Kind.unknown] = 'unknown'
 	s[Kind.eof] = 'eof'
 	s[Kind.name] = 'name'
+	s[Kind.string] = 'string'
+	s[Kind.number] = 'number'
 	s[Kind.lcbr] = '{'
 	s[Kind.rcbr] = '}'
 	s[Kind.lpar] = '('
