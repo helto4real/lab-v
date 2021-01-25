@@ -1,0 +1,183 @@
+{
+	"ast_type":	"ast.File",
+	"path":	"/home/thhel/git/lab-v/test.v",
+	"path_base":	"test.v",
+	"mod":	{
+		"ast_type":	"Module",
+		"name":	"main",
+		"is_skipped":	true,
+		"attrs":	[],
+		"pos":	{
+			"line_nr":	0,
+			"pos":	0,
+			"len":	0
+		}
+	},
+	"imports":	[],
+	"global_scope":	{
+		"ast_type":	"Scope",
+		"parent":	"0",
+		"children":	[],
+		"start_pos":	0,
+		"end_pos":	0,
+		"objects":	{
+		},
+		"struct_fields":	[]
+	},
+	"scope":	{
+		"ast_type":	"Scope",
+		"parent":	"1da0320",
+		"children":	[{
+				"parent":	"1d9a0c0",
+				"start_pos":	3,
+				"end_pos":	29
+			}],
+		"start_pos":	0,
+		"end_pos":	30,
+		"objects":	{
+		},
+		"struct_fields":	[]
+	},
+	"errors":	[],
+	"warnings":	[],
+	"auto_imports":	[],
+	"imported_symbols":	{
+	},
+	"generic_fns":	[],
+	"embedded_files":	[],
+	"stmts":	[{
+			"ast_type":	"Module",
+			"name":	"main",
+			"is_skipped":	true,
+			"attrs":	[],
+			"pos":	{
+				"line_nr":	0,
+				"pos":	0,
+				"len":	0
+			}
+		}, {
+			"ast_type":	"FnDecl",
+			"name":	"main.main",
+			"mod":	"main",
+			"is_deprecated":	false,
+			"is_pub":	false,
+			"is_variadic":	false,
+			"is_anon":	false,
+			"is_manualfree":	false,
+			"receiver":	{
+				"ast_type":	"Field",
+				"name":	"",
+				"typ":	"void",
+				"pos":	{
+					"line_nr":	0,
+					"pos":	0,
+					"len":	0
+				}
+			},
+			"receiver_pos":	{
+				"line_nr":	0,
+				"pos":	0,
+				"len":	0
+			},
+			"is_method":	false,
+			"method_idx":	0,
+			"rec_mut":	false,
+			"rec_share":	"enum:0(mut)",
+			"language":	"enum:0(v)",
+			"no_body":	false,
+			"is_builtin":	false,
+			"is_generic":	false,
+			"is_direct_arr":	false,
+			"pos":	{
+				"line_nr":	0,
+				"pos":	0,
+				"len":	9
+			},
+			"body_pos":	{
+				"line_nr":	1,
+				"pos":	13,
+				"len":	7
+			},
+			"file":	"/home/thhel/git/lab-v/test.v",
+			"return_type":	"void",
+			"source_file":	0,
+			"scope":	31084944,
+			"attrs":	[],
+			"params":	[],
+			"stmts":	[{
+					"ast_type":	"ExprStmt",
+					"typ":	null,
+					"is_expr":	false,
+					"expr":	{
+						"ast_type":	"CallExpr",
+						"left":	null,
+						"is_method":	false,
+						"mod":	"main",
+						"name":	"println",
+						"language":	"enum:0(v)",
+						"scope":	31084944,
+						"args":	[{
+								"ast_type":	"CallArg",
+								"typ":	null,
+								"is_mut":	false,
+								"share":	"enum:0(mut)",
+								"expr":	{
+									"ast_type":	"StringLiteral",
+									"val":	"test",
+									"is_raw":	false,
+									"language":	"enum:0(v)",
+									"pos":	{
+										"line_nr":	1,
+										"pos":	21,
+										"len":	6
+									}
+								},
+								"is_tmp_autofree":	false,
+								"pos":	{
+									"line_nr":	1,
+									"pos":	21,
+									"len":	6
+								},
+								"comments":	[]
+							}],
+						"expected_arg_types":	[],
+						"or_block":	{
+							"ast_type":	"OrExpr",
+							"stmts":	[],
+							"kind":	"enum:0(absent)",
+							"pos":	{
+								"line_nr":	2,
+								"pos":	29,
+								"len":	1
+							}
+						},
+						"left_type":	null,
+						"receiver_type":	null,
+						"return_type":	null,
+						"should_be_skipped":	false,
+						"generic_type":	"void",
+						"generic_list_pos":	{
+							"line_nr":	1,
+							"pos":	20,
+							"len":	1
+						},
+						"free_receiver":	false,
+						"from_embed_type":	null,
+						"comments":	[],
+						"pos":	{
+							"line_nr":	1,
+							"pos":	13,
+							"len":	15
+						}
+					},
+					"pos":	{
+						"line_nr":	1,
+						"pos":	13,
+						"len":	15
+					},
+					"comments":	[]
+				}],
+			"comments":	[],
+			"next_comments":	[]
+		}]
+}

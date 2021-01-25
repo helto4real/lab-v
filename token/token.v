@@ -16,6 +16,9 @@ pub enum Kind {
 	rcbr
 	lpar
 	rpar
+	colon
+	assign
+	decl_assign
 	eof
 	unknown
 	keyword_beg
@@ -46,10 +49,13 @@ fn build_token_str() []string {
 	s[Kind.name] = 'name'
 	s[Kind.string] = 'string'
 	s[Kind.number] = 'number'
+	s[Kind.decl_assign] = ':='
+	s[Kind.assign] = '='
 	s[Kind.lcbr] = '{'
 	s[Kind.rcbr] = '}'
 	s[Kind.lpar] = '('
 	s[Kind.rpar] = ')'
+	s[Kind.colon] = ':'
 	s[Kind.key_fn] = 'fn'
 	return s
 }

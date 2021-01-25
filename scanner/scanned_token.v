@@ -26,7 +26,6 @@ fn (mut s Scanner) token_rpar() token.Token {
 	return s.new_token(.rpar, ')', 1)
 }
 
-
 fn (mut s Scanner) token_name(name string) token.Token {
 	return s.new_token(.name, name, name.len)
 }
@@ -36,6 +35,14 @@ fn (mut s Scanner) token_string(lit string) token.Token {
 
 fn (mut s Scanner) token_keyword(kind token.Kind, lit string) token.Token {
 	return s.new_token(kind, lit, lit.len)
+}
+
+fn (mut s Scanner) token_decl_assign() token.Token {
+	return s.new_token(.decl_assign, ':=', 2)
+}
+
+fn (mut s Scanner) token_colon() token.Token {
+	return s.new_token(.colon, ':', 1)
 }
 
 [inline]

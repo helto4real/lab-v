@@ -45,6 +45,7 @@ pub fn (mut s Scanner) scan_next_token() token.Token
 		}
 
 		c := s.text[s.pos]
+		nextc := s.look_ahead(1)
 		if is_name_char(c) {
 			name := s.ident_name()
 			kind := token.keywords[name]
@@ -68,10 +69,27 @@ pub fn (mut s Scanner) scan_next_token() token.Token
 				ident_string := s.ident_string()
 				return s.token_string(ident_string)
 			}
+			`:` {
+				if nextc == `=` {
+					s.pos++
+					return s.token_decl_assign()
+				} else {
+					return s.token_colon()
+				}
+			}
 			else{}
 		}
 	}
 	return s.token_unknown()
+}
+
+[inline]
+fn (s Scanner) look_ahead(n int) byte {
+	if s.pos + n < s.text.len {
+		return s.text[s.pos + n]
+	} else {
+		return `\0`
+	}
 }
 
 [inline]

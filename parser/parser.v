@@ -8,6 +8,9 @@ pub struct Parser {
 mut:
 	scanner 	&scanner.Scanner
 	tok         token.Token
+	peek_tok	token.Token
+	prev_tok	token.Token
+
 	mod			string
 pub mut:
 	top_lev_stmts []ast.Stmt
@@ -22,6 +25,7 @@ pub fn new_from_text(text string) &Parser{
 
 pub fn (mut p Parser) parse() {
 	mut statements := []ast.Stmt{}
+	p.scan_next_token()
 	for {
 		p.scan_next_token()
 		if p.tok.kind == .eof {
@@ -37,15 +41,19 @@ pub fn (mut p Parser) scan_next_top_stmt() ast.Stmt {
 		.key_fn {
 			return p.fn_decl()
 		}
-		else {return ast.Unknown{}}
+		else {return p.unknown()}
 	}
-	return ast.Unknown{}
+	return p.unknown()
+}
+fn (mut p Parser) init_scan() {
+	p.scan_next_token()
+	p.scan_next_token()
 }
 
 fn (mut p Parser) scan_next_token() {
-	// p.prev_tok = p.tok
-	p.tok = p.scanner.scan_next_token()
-	// p.peek_tok = p.peek_tok2
+	p.prev_tok = p.tok
+	p.tok = p.peek_tok
+	p.peek_tok = p.scanner.scan_next_token()
 	// p.peek_tok2 = p.peek_tok3
 	// p.peek_tok3 = p.scanner.scan()
 	/*
@@ -54,4 +62,8 @@ fn (mut p Parser) scan_next_token() {
 		p.next()
 	}
 	*/
+}
+
+fn (mut p Parser) unknown() ast.Unknown {
+	return ast.Unknown{}
 }

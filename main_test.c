@@ -1,13 +1,6 @@
-module gen
 
-const (
-	main_c             = '
-int main() {
-	v_main_main();
-	return 0;
-}
-'
-	built_in_types     = '
+#include <stdio.h>
+#include <stdlib.h>
 
 #if defined(__TINYC__) && defined(__has_include)
 // tcc does not support has_include properly yet, turn it off completely
@@ -39,20 +32,21 @@ typedef float f32;
 typedef double f64;
 typedef int64_t int_literal;
 typedef double float_literal;
-typedef unsigned char* byteptr;
-typedef void* voidptr;
-typedef char* charptr;
-typedef byte array_fixed_byte_300 [300];
-'
-	built_in_structs   = '
+typedef unsigned char *byteptr;
+typedef void *voidptr;
+typedef char *charptr;
+typedef byte array_fixed_byte_300[300];
+
 // V type definitions:
-struct string {
+struct string
+{
 	byteptr str;
 	int len;
 	int is_lit;
 };
 
-struct array {
+struct array
+{
 	int element_size;
 	voidptr data;
 	int len;
@@ -61,20 +55,20 @@ struct array {
 
 typedef struct string string;
 
+string _STR(const char *, int, ...);
 
 #define _SLIT(s) ((string){.str = (byteptr)("" s), .len = (sizeof(s) - 1), .is_lit = 1})
-'
-	built_in_functions = '
-// stdout, stderr 
-void println(string s) {
-	#if defined(_WIN32)
-	{
-	}
-	#else
-	{
-		printf("%.*s\\n", s.len, s.str);
-	}
-	#endif
+
+void v_main_main()
+{
+	string x = _SLIT("hello\n");
+	printf("testarr\n");
+	printf("testar igen\n");
+	printf(x.str);
 }
-'
-)
+
+int main()
+{
+	v_main_main();
+	return 0;
+}
