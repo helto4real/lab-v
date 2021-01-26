@@ -11,11 +11,17 @@ fn main() {
 	fnr := file_ast.stmts[1]
 	if fnr is ast.FnDecl {
 		for _, x in fnr.stmts {
-			println('AST: ${x}')
+			println('AST: ${x} : ${x.type_name()}')
 			match x {
 				ast.AssignStmt {
 					println('LEFT: ${x.left[0]}, ${x.left[0].type_name()}')
 					println('RIGHT: ${x.right[0]}, ${x.right[0].type_name()}')
+				}
+				ast.ExprStmt {
+					if x.expr is ast.CallExpr {
+						
+						println('EXPR: ${x.expr.args[0].expr.type_name()}')
+					}
 				}
 				else {
 

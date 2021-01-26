@@ -75,8 +75,17 @@ fn (mut g Gen) gen_call_expr(ce ast.CallExpr) {
 			g.write(', ')
 		}
 		match expr {
-			ast.StringLiteral { g.write('_SLIT("$expr.val")') }
-			else {}
+			ast.StringLiteral {
+				g.write('_SLIT("$expr.val")')
+			}
+			ast.Ident {
+				// if expr.typ == .string {
+					g.write(expr.name)
+				// }
+			}
+			else {
+				println('Unexpected expression: $expr.type_name()')
+			}
 		}
 	}
 	g.writeln(');')

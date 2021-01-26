@@ -1,30 +1,33 @@
 module main
+
 // import v.parser
 // import v.table
 // import v.pref
 // import v.ast
-import parser 
+import parser
 import gen
 import os
 import ast
 
-const(
+const (
 	code = "
 
 fn main() {
 	x := 'hello world'
 	println('testarr')
-	println('testar igen')
+	println(x)
 }
 
 "
 )
 
 fn main() {
-	mut p := parser.new_from_text(code)
+	mut p := parser.new_from_text(main.code)
 	p.parse()
 	mut f := os.open_file('./main.c', 'w+', 0o666) ?
-	defer {f.close()}
+	defer {
+		f.close()
+	}
 	f.write_string(gen.cgen(p))
 
 	for _, s in p.top_lev_stmts {
@@ -34,7 +37,6 @@ fn main() {
 			}
 		}
 	}
-	
 }
 
 // fn main() {

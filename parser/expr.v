@@ -8,6 +8,13 @@ fn (mut p Parser) expr() ast.Expr {
 		.string { return ast.StringLiteral{
 				val: p.tok.lit
 			} }
+		.name { return p.name_expr()}
 		else { return p.unknown() }
+	}
+}
+
+fn (mut p Parser) name_expr() ast.Expr {
+	return ast.Ident{
+		name: p.tok.lit
 	}
 }
