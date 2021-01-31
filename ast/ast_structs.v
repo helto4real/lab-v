@@ -3,7 +3,7 @@ module ast
 import token
 import table
 
-pub type Stmt = AssignStmt | ExprStmt | FnDecl | Unknown
+pub type Stmt = AssignStmt | ExprStmt | FnDecl | ModuleStmt | StructDecl | Unknown
 
 pub type Expr = CallExpr | Empty | Ident | StringLiteral | Unknown
 
@@ -75,5 +75,26 @@ pub:
 	tok_kind token.Kind
 pub mut:
 	name string
-	typ  table.Type = .unknown
+	kind table.Kind = .unknown
+}
+
+pub struct ModuleStmt {
+pub:
+	name       string // encoding.base64
+	short_name string // base64
+	is_skipped bool   // module main can be skipped in single file programs
+}
+
+pub struct StructDecl {
+pub:
+	name string
+pub mut:
+	fields []StructField
+}
+
+pub struct StructField {
+pub mut:
+	name       string
+	field_type string
+	typ        table.Type
 }

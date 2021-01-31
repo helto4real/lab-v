@@ -12,6 +12,10 @@ import ast
 const (
 	code = "
 
+struct MyStruct {
+	test string
+}
+
 fn main() {
 	x := 'hello world'
 	println('testarr')
@@ -22,19 +26,26 @@ fn main() {
 )
 
 fn main() {
-	mut p := parser.new_from_text(main.code)
+	mut p := parser.new_from_text(code)
 	p.parse()
 	mut f := os.open_file('./main.c', 'w+', 0o666) ?
 	defer {
 		f.close()
 	}
-	f.write_string(gen.cgen(p))
+	f.write_string(gen.cgen(p)) ?
 
+	println('TOP LEVEL STATEMENTS:')
 	for _, s in p.top_lev_stmts {
-		if s is ast.FnDecl {
-			for _, c in s.stmts {
-				println('token: $c')
+		match s {
+			ast.FnDecl {
+				for _, c in s.stmts {
+					println('stmt: $c')
+				}
 			}
+			ast.StructDecl {
+				println('struct: $s')
+			}
+			else {}
 		}
 	}
 }

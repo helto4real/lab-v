@@ -1,3 +1,7 @@
+struct Test {
+	number int
+	a_string string
+}
 fn main() {
 	x := 'Hello world'
 	y := u64(10)

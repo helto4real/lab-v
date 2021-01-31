@@ -23,6 +23,8 @@ pub enum Kind {
 	unknown
 	keyword_beg
 	key_fn
+	key_module
+	key_struct
 	keyword_end
 	_end_
 }
@@ -57,5 +59,7 @@ fn build_token_str() []string {
 	s[Kind.rpar] = ')'
 	s[Kind.colon] = ':'
 	s[Kind.key_fn] = 'fn'
+	s[Kind.key_module] = 'module'
+	s[Kind.key_struct] = 'struct'
 	return s
 }

@@ -9,9 +9,9 @@ const (
 
 pub struct Scanner {
 pub mut:
-	text	string
-	pos 	int
-	tokens 	[]token.Token
+	text   string
+	pos    int
+	tokens []token.Token
 }
 
 // pub fn new_from_file(file_path string) {
@@ -36,8 +36,7 @@ pub fn (mut s Scanner) scan() {
 	}
 }
 
-pub fn (mut s Scanner) scan_next_token() token.Token
-{
+pub fn (mut s Scanner) scan_next_token() token.Token {
 	for {
 		s.skip_whitespace()
 		if s.pos >= s.text.len {
@@ -63,9 +62,9 @@ pub fn (mut s Scanner) scan_next_token() token.Token
 		} else if c == `}` {
 			return s.token_rcbr()
 		}
-		
+
 		match c {
-			single_quote, double_quote {
+			scanner.single_quote, scanner.double_quote {
 				ident_string := s.ident_string()
 				return s.token_string(ident_string)
 			}
@@ -77,7 +76,7 @@ pub fn (mut s Scanner) scan_next_token() token.Token
 					return s.token_colon()
 				}
 			}
-			else{}
+			else {}
 		}
 	}
 	return s.token_unknown()
@@ -106,7 +105,6 @@ fn (mut s Scanner) skip_whitespace() {
 	}
 }
 
-
 [inline]
 pub fn is_nl(c byte) bool {
 	return c == `\r` || c == `\n`
@@ -131,7 +129,7 @@ fn (mut s Scanner) ident_name() string {
 
 fn (mut s Scanner) ident_string() string {
 	mut q := s.text[s.pos]
-	start_pos := s.pos+1
+	start_pos := s.pos + 1
 	q_char := q
 	for {
 		s.pos++

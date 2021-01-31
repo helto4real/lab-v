@@ -1,25 +1,24 @@
 module parser
 
-import ast 
-import scanner 
+import ast
+import scanner
 import token
 
 pub struct Parser {
 mut:
-	scanner 	&scanner.Scanner
-	tok         token.Token
-	peek_tok	token.Token
-	prev_tok	token.Token
-
-	mod			string
+	scanner  &scanner.Scanner
+	tok      token.Token
+	peek_tok token.Token
+	prev_tok token.Token
+	mod      string
 pub mut:
 	top_lev_stmts []ast.Stmt
 }
 
-pub fn new_from_text(text string) &Parser{
+pub fn new_from_text(text string) &Parser {
 	return &Parser{
-		scanner: 	scanner.new_from_text(text)
-		mod: 		'main' // Use default main
+		scanner: scanner.new_from_text(text)
+		mod: 'main' // Use default main
 	}
 }
 
@@ -41,10 +40,16 @@ pub fn (mut p Parser) scan_next_top_stmt() ast.Stmt {
 		.key_fn {
 			return p.fn_decl()
 		}
-		else {return p.unknown()}
+		.key_struct {
+			return p.struct_decl()
+		}
+		else {
+			return p.unknown()
+		}
 	}
 	return p.unknown()
 }
+
 fn (mut p Parser) init_scan() {
 	p.scan_next_token()
 	p.scan_next_token()
@@ -66,4 +71,22 @@ fn (mut p Parser) scan_next_token() {
 
 fn (mut p Parser) unknown() ast.Unknown {
 	return ast.Unknown{}
+}
+
+[inline]
+fn (mut p Parser) assert_token(kind token.Kind) {
+	$if debug_parser ? {
+		if kind != p.tok.kind {
+			panic('assert_token: expected ($kind) got $p.tok.kind')
+		}
+	}
+}
+
+fn (mut p Parser) check_token_kind(kind token.Kind, err string) bool {
+	if kind == p.tok.kind {
+		return true
+	}
+	println('EXPECTED KIND: $kind, GOT $p.tok.kind; ERROR: $err')
+
+	return false
 }
