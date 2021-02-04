@@ -15,7 +15,8 @@ module table
 
 pub type Type = int
 
-// pub type TypeInfo = Aggregate | Alias | Array | ArrayFixed | Chan | Enum | FnType | GenericStructInst |
+pub type TypeInfo = Array | Struct // Aggregate | Alias | Array | ArrayFixed | Chan | Enum | FnType | GenericStructInst |
+
 // 	GoHandle | Interface | Map | MultiReturn | Struct | SumType
 
 // pub enum Language {
@@ -24,26 +25,33 @@ pub type Type = int
 // 	js
 // }
 
-// // Represents a type that only needs an identifier, e.g. int, array_int.
-// // A pointer type `&T` would have a TypeSymbol `T`.
-// // Note: For a Type, use:
-// // * Table.type_to_str(typ) not TypeSymbol.name.
-// // * Table.type_kind(typ) not TypeSymbol.kind.
-// // Each TypeSymbol is entered into `Table.types`.
-// // See also: Table.get_type_symbol.
-// pub struct TypeSymbol {
-// pub:
-// 	parent_idx int
-// pub mut:
-// 	info      TypeInfo
-// 	kind      Kind
-// 	name      string // the internal & source name of the type, i.e. `[5]int`.
-// 	cname     string // the name with no dots for use in the generated C code
-// 	methods   []Fn
-// 	mod       string
-// 	is_public bool
-// 	language  Language
-// }
+// Represents a type that only needs an identifier, e.g. int, array_int.
+// A pointer type `&T` would have a TypeSymbol `T`.
+// Note: For a Type, use:
+// * Table.type_to_str(typ) not TypeSymbol.name.
+// * Table.type_kind(typ) not TypeSymbol.kind.
+// Each TypeSymbol is entered into `Table.types`.
+// See also: Table.get_type_symbol.
+pub struct TypeSymbol {
+pub:
+	parent_idx int
+pub mut:
+	info  TypeInfo
+	kind  Kind
+	name  string // the internal & source name of the type, i.e. `[5]int`.
+	cname string // the name with no dots for use in the generated C code
+	// methods   []Fn
+	mod       string
+	is_public bool
+	// language  Language
+}
+
+pub struct Array {
+pub:
+	nr_dims int
+pub mut:
+	elem_type Type
+}
 
 // // max of 8
 // pub enum TypeFlag {
@@ -499,49 +507,48 @@ pub fn (t TypeSymbol) str() string {
 	return t.name
 }
 */
-// pub fn (mut t Table) register_builtin_type_symbols() {
-// 	// reserve index 0 so nothing can go there
-// 	// save index check, 0 will mean not found
-// 	t.register_type_symbol(kind: .placeholder, name: 'reserved_0')
-// 	t.register_type_symbol(kind: .void, name: 'void', cname: 'void', mod: 'builtin')
-// 	t.register_type_symbol(kind: .voidptr, name: 'voidptr', cname: 'voidptr', mod: 'builtin')
-// 	t.register_type_symbol(kind: .byteptr, name: 'byteptr', cname: 'byteptr', mod: 'builtin')
-// 	t.register_type_symbol(kind: .charptr, name: 'charptr', cname: 'charptr', mod: 'builtin')
-// 	t.register_type_symbol(kind: .i8, name: 'i8', cname: 'i8', mod: 'builtin')
-// 	t.register_type_symbol(kind: .i16, name: 'i16', cname: 'i16', mod: 'builtin')
-// 	t.register_type_symbol(kind: .int, name: 'int', cname: 'int', mod: 'builtin')
-// 	t.register_type_symbol(kind: .i64, name: 'i64', cname: 'i64', mod: 'builtin')
-// 	t.register_type_symbol(kind: .byte, name: 'byte', cname: 'byte', mod: 'builtin')
-// 	t.register_type_symbol(kind: .u16, name: 'u16', cname: 'u16', mod: 'builtin')
-// 	t.register_type_symbol(kind: .u32, name: 'u32', cname: 'u32', mod: 'builtin')
-// 	t.register_type_symbol(kind: .u64, name: 'u64', cname: 'u64', mod: 'builtin')
-// 	t.register_type_symbol(kind: .f32, name: 'f32', cname: 'f32', mod: 'builtin')
-// 	t.register_type_symbol(kind: .f64, name: 'f64', cname: 'f64', mod: 'builtin')
-// 	t.register_type_symbol(kind: .char, name: 'char', cname: 'char', mod: 'builtin')
-// 	t.register_type_symbol(kind: .bool, name: 'bool', cname: 'bool', mod: 'builtin')
-// 	t.register_type_symbol(kind: .none_, name: 'none', cname: 'none', mod: 'builtin')
-// 	t.register_type_symbol(kind: .string, name: 'string', cname: 'string', mod: 'builtin')
-// 	t.register_type_symbol(kind: .ustring, name: 'ustring', cname: 'ustring', mod: 'builtin')
-// 	t.register_type_symbol(kind: .rune, name: 'rune', cname: 'rune', mod: 'builtin')
-// 	t.register_type_symbol(kind: .array, name: 'array', cname: 'array', mod: 'builtin')
-// 	t.register_type_symbol(kind: .map, name: 'map', cname: 'map', mod: 'builtin')
-// 	t.register_type_symbol(kind: .chan, name: 'chan', cname: 'chan', mod: 'builtin')
-// 	t.register_type_symbol(kind: .size_t, name: 'size_t', cname: 'size_t', mod: 'builtin')
-// 	t.register_type_symbol(kind: .any, name: 'any', cname: 'any', mod: 'builtin')
-// 	t.register_type_symbol(
-// 		kind: .float_literal
-// 		name: 'float literal'
-// 		cname: 'float_literal'
-// 		mod: 'builtin'
-// 	)
-// 	t.register_type_symbol(
-// 		kind: .int_literal
-// 		name: 'int literal'
-// 		cname: 'int_literal'
-// 		mod: 'builtin'
-// 	)
-// 	t.register_type_symbol(kind: .gohandle, name: 'gohandle', cname: 'gohandle', mod: 'builtin')
-// }
+pub fn (mut t Table) register_builtin_type_symbols() {
+	// reserve index 0 so nothing can go there
+	// save index check, 0 will mean not found
+	t.register_type_symbol(kind: .unknown, name: 'reserved_0')
+	t.register_type_symbol(kind: .void, name: 'void', cname: 'void', mod: 'builtin')
+	t.register_type_symbol(kind: .voidptr, name: 'voidptr', cname: 'voidptr', mod: 'builtin')
+	t.register_type_symbol(kind: .byteptr, name: 'byteptr', cname: 'byteptr', mod: 'builtin')
+	t.register_type_symbol(kind: .charptr, name: 'charptr', cname: 'charptr', mod: 'builtin')
+	t.register_type_symbol(kind: .i8, name: 'i8', cname: 'i8', mod: 'builtin')
+	t.register_type_symbol(kind: .i16, name: 'i16', cname: 'i16', mod: 'builtin')
+	t.register_type_symbol(kind: .int, name: 'int', cname: 'int', mod: 'builtin')
+	t.register_type_symbol(kind: .i64, name: 'i64', cname: 'i64', mod: 'builtin')
+	t.register_type_symbol(kind: .byte, name: 'byte', cname: 'byte', mod: 'builtin')
+	t.register_type_symbol(kind: .u16, name: 'u16', cname: 'u16', mod: 'builtin')
+	t.register_type_symbol(kind: .u32, name: 'u32', cname: 'u32', mod: 'builtin')
+	t.register_type_symbol(kind: .u64, name: 'u64', cname: 'u64', mod: 'builtin')
+	t.register_type_symbol(kind: .f32, name: 'f32', cname: 'f32', mod: 'builtin')
+	t.register_type_symbol(kind: .f64, name: 'f64', cname: 'f64', mod: 'builtin')
+	t.register_type_symbol(kind: .char, name: 'char', cname: 'char', mod: 'builtin')
+	t.register_type_symbol(kind: .bool, name: 'bool', cname: 'bool', mod: 'builtin')
+	t.register_type_symbol(kind: .none_, name: 'none', cname: 'none', mod: 'builtin')
+	t.register_type_symbol(kind: .string, name: 'string', cname: 'string', mod: 'builtin')
+	t.register_type_symbol(kind: .ustring, name: 'ustring', cname: 'ustring', mod: 'builtin')
+	t.register_type_symbol(kind: .rune, name: 'rune', cname: 'rune', mod: 'builtin')
+	t.register_type_symbol(kind: .array, name: 'array', cname: 'array', mod: 'builtin')
+	t.register_type_symbol(kind: .map, name: 'map', cname: 'map', mod: 'builtin')
+	t.register_type_symbol(kind: .chan, name: 'chan', cname: 'chan', mod: 'builtin')
+	t.register_type_symbol(kind: .size_t, name: 'size_t', cname: 'size_t', mod: 'builtin')
+	t.register_type_symbol(kind: .any, name: 'any', cname: 'any', mod: 'builtin')
+	t.register_type_symbol(
+		kind: .float_literal
+		name: 'float literal'
+		cname: 'float_literal'
+		mod: 'builtin'
+	)
+	t.register_type_symbol(
+		kind: .int_literal
+		name: 'int literal'
+		cname: 'int_literal'
+		mod: 'builtin'
+	)
+}
 
 // [inline]
 // pub fn (t &TypeSymbol) is_pointer() bool {
@@ -636,11 +643,11 @@ pub fn (kinds []Kind) str() string {
 }
 
 pub struct Struct {
-// pub:
-	// attrs []Attr
 pub mut:
+	// pub:
+	// attrs []Attr
 	// embeds        []Type
-	fields        []Field
+	fields []Field
 	// is_typedef    bool // C. [typedef]
 	// is_union      bool
 	// is_ref_only   bool
@@ -691,10 +698,10 @@ pub struct Field {
 pub:
 	name string
 pub mut:
-	typ              Type
+	typ Type
 	// default_expr     FExpr
 	// has_default_expr bool
-	default_val      string
+	default_val string
 	// attrs            []Attr
 	// is_pub           bool
 	// is_mut           bool

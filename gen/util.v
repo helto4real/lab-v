@@ -1,22 +1,22 @@
 module gen
 
-[inline] 
+[inline]
 fn (mut g Gen) write(str string) {
 	g.b.write(str)
 }
 
-[inline] 
+[inline]
 fn (mut g Gen) writeln(str string) {
 	g.b.writeln(str)
 }
 
-[inline] 
+[inline]
 fn (mut g Gen) write_indent(str string) {
 	g.add_indent()
 	g.b.write(str)
 }
 
-[inline] 
+[inline]
 fn (mut g Gen) writeln_indent(str string) {
 	g.add_indent()
 	g.b.writeln(str)

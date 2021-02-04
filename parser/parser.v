@@ -3,6 +3,7 @@ module parser
 import ast
 import scanner
 import token
+import table 
 
 pub struct Parser {
 mut:
@@ -11,18 +12,19 @@ mut:
 	peek_tok token.Token
 	prev_tok token.Token
 	mod      string
-pub mut:
-	top_lev_stmts []ast.Stmt
+	table	 &table.Table
+	
 }
 
-pub fn new_from_text(text string) &Parser {
+pub fn new_from_text(text string, mut table table.Table) &Parser {
 	return &Parser{
 		scanner: scanner.new_from_text(text)
 		mod: 'main' // Use default main
+		table: table
 	}
 }
 
-pub fn (mut p Parser) parse() {
+pub fn (mut p Parser) parse() ast.File {
 	mut statements := []ast.Stmt{}
 	p.scan_next_token()
 	for {
@@ -32,7 +34,10 @@ pub fn (mut p Parser) parse() {
 		}
 		statements << p.scan_next_top_stmt()
 	}
-	p.top_lev_stmts << statements
+	file := ast.File{
+		stmts: statements
+	}
+	return file
 }
 
 pub fn (mut p Parser) scan_next_top_stmt() ast.Stmt {
@@ -89,4 +94,9 @@ fn (mut p Parser) check_token_kind(kind token.Kind, err string) bool {
 	println('EXPECTED KIND: $kind, GOT $p.tok.kind; ERROR: $err')
 
 	return false
+}
+
+fn (p &Parser) get_ctype_from_type(typ table.Type) string {
+	type_info := p.table.types[int(typ)]
+	return type_info.cname
 }

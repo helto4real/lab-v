@@ -2,6 +2,7 @@ module parser
 import ast 
 
 fn test_parse_first_top_stmt() {
+	mut table := table.new_table()
 	mut p := new_from_text('fn main() {}')
 
 	p.init_scan()

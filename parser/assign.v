@@ -2,6 +2,7 @@ module parser
 
 import token
 import ast
+import table
 
 pub fn (mut p Parser) assign_stmt(kind token.Kind) ast.Stmt {
 	mut expr_left := ast.Expr{}
@@ -15,7 +16,11 @@ pub fn (mut p Parser) assign_stmt(kind token.Kind) ast.Stmt {
 		p.scan_next_token()
 		p.scan_next_token()
 		match p.tok.kind {
-			.string { ret.right << p.expr() }
+			.string {
+				ret.right << p.expr()
+				ret.left_types << table.string_type_idx
+				ret.right_types << table.string_type_idx
+			}
 			else {}
 		}
 		return ret

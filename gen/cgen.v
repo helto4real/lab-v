@@ -1,8 +1,8 @@
 module gen
 
-import parser
 import ast
 import strings
+import table
 
 pub struct Gen {
 pub mut:
@@ -10,15 +10,15 @@ pub mut:
 	tab_index int
 }
 
-pub fn cgen(p &parser.Parser) string {
+pub fn cgen(mut tab table.Table, mut file ast.File) string {
 	mut g := Gen{
 		b: strings.new_builder(1000)
 	}
 	g.b.writeln(std_include)
-	g.b.writeln(built_in_types)
-	g.b.writeln(built_in_structs)
-	g.b.writeln(built_in_functions)
-	for _, s in p.top_lev_stmts {
+	// g.b.writeln(built_in_types)
+	// g.b.writeln(built_in_structs)
+	// g.b.writeln(built_in_functions)
+	for _, s in file.stmts {
 		match s {
 			ast.FnDecl { g.gen_fn(s) }
 			else {}
@@ -80,7 +80,7 @@ fn (mut g Gen) gen_call_expr(ce ast.CallExpr) {
 			}
 			ast.Ident {
 				// if expr.typ == .string {
-					g.write(expr.name)
+				g.write(expr.name)
 				// }
 			}
 			else {

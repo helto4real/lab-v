@@ -1,5 +1,4 @@
 module main
-
 // import v.parser
 // import v.table
 // import v.pref
@@ -8,6 +7,7 @@ import parser
 import gen
 import os
 import ast
+import table
 
 const (
 	code = "
@@ -20,22 +20,25 @@ fn main() {
 	x := 'hello world'
 	println('testarr')
 	println(x)
+
+	
 }
 
 "
 )
 
 fn main() {
-	mut p := parser.new_from_text(code)
-	p.parse()
-	mut f := os.open_file('./main.c', 'w+', 0o666) ?
+	mut table := table.new_table()
+	mut p := parser.new_from_text(code, mut table)
+	mut file := p.parse()
+	mut f := os.open_file('./gen/c/src/main.c', 'w+', 0o666) ?
 	defer {
 		f.close()
 	}
-	f.write_string(gen.cgen(p)) ?
+	f.write_string(gen.cgen(mut table, mut file)) ?
 
 	println('TOP LEVEL STATEMENTS:')
-	for _, s in p.top_lev_stmts {
+	for _, s in file.stmts {
 		match s {
 			ast.FnDecl {
 				for _, c in s.stmts {
