@@ -1,6 +1,7 @@
 module parser
 
 import ast
+import table
 
 // struct_decl parses a struct declaration 
 // 	struct {
@@ -22,6 +23,15 @@ fn (mut p Parser) struct_decl() ast.Stmt {
 	}
 
 	fields := p.struct_fields()
+
+	ts := table.TypeSymbol{
+		kind: .struct_
+		name: name
+		cname: name
+		mod: p.mod
+	}
+
+	p.table.register_type_symbol(ts)
 
 	return ast.StructDecl{
 		name: name
@@ -60,4 +70,14 @@ fn (mut p Parser) struct_fields() []ast.StructField {
 		}
 	}
 	return fields
+}
+
+fn (mut p Parser) struct_init(short_syntax bool) ast.StructInit {
+	name := p.tok.lit
+	typ := p.table.register_or_lookup_type(name)
+	for p.tok.kind != .rcbr {
+		p.scan_next_token()
+	}
+	// p.scan_next_token()
+	return ast.StructInit{typ: typ}
 }

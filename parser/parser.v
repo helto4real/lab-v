@@ -7,12 +7,14 @@ import table
 
 pub struct Parser {
 mut:
-	scanner  &scanner.Scanner
-	tok      token.Token
-	peek_tok token.Token
-	prev_tok token.Token
-	mod      string
-	table	 &table.Table
+	scanner    &scanner.Scanner
+	tok        token.Token
+	peek_tok   token.Token
+	peek_tok2 token.Token
+	peek_tok3 token.Token
+	prev_tok   token.Token
+	mod        string
+	table	   &table.Table
 	
 }
 
@@ -58,12 +60,16 @@ pub fn (mut p Parser) scan_next_top_stmt() ast.Stmt {
 fn (mut p Parser) init_scan() {
 	p.scan_next_token()
 	p.scan_next_token()
+	p.scan_next_token()
+	p.scan_next_token()
 }
 
 fn (mut p Parser) scan_next_token() {
 	p.prev_tok = p.tok
 	p.tok = p.peek_tok
-	p.peek_tok = p.scanner.scan_next_token()
+	p.peek_tok = p.peek_tok2
+	p.peek_tok2 = p.peek_tok3
+	p.peek_tok3 = p.scanner.scan_next_token()
 	// p.peek_tok2 = p.peek_tok3
 	// p.peek_tok3 = p.scanner.scan()
 	/*

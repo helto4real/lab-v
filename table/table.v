@@ -59,3 +59,11 @@ pub fn (mut t Table) register_type_symbol(typ TypeSymbol) int {
 	t.type_idxs[typ.name] = typ_idx
 	return typ_idx
 }
+
+pub fn (mut t Table) register_or_lookup_type(type_str string) Type {
+	existing_idx := t.type_idxs[type_str]
+	if existing_idx > 0 {
+		return existing_idx
+	}
+	return t.register_type_symbol(kind: .unknown, name: 'type_str', cname: 'type_str', mod: 'unknown')
+}

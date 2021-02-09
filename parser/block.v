@@ -8,8 +8,8 @@ pub fn (mut p Parser) parse_block_no_scope(is_top_level bool) []ast.Stmt {
 	if p.tok.kind != .rcbr {
 		// mut count := 0
 		for p.tok.kind !in [.eof, .rcbr] {
-			p.scan_next_token()
 			stmts << p.stmt(is_top_level)
+			p.scan_next_token()
 			// count++
 			// if count % 100000 == 0 {
 			// 	eprintln('parsed $count statements so far from fn $p.cur_fn_name ...')

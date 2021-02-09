@@ -60,6 +60,7 @@ fn (mut p Parser) fn_decl() ast.FnDecl {
 	if p.tok.kind != .lcbr {
 		return ast.FnDecl{}
 	}
+	p.scan_next_token()
 	stmts := p.parse_block_no_scope(true)
 	return ast.FnDecl{
 		stmts: stmts

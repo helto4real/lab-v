@@ -5,7 +5,7 @@ import table
 
 pub type Stmt = AssignStmt | ExprStmt | FnDecl | ModuleStmt | StructDecl | Unknown
 
-pub type Expr = CallExpr | Empty | Ident | StringLiteral | Unknown
+pub type Expr = CallExpr | Empty | Ident | StringLiteral | StructInit | Unknown
 
 pub struct Error {}
 
@@ -74,6 +74,7 @@ pub struct Ident {
 pub:
 	tok_kind token.Kind
 pub mut:
+	mod  string
 	name string
 	kind table.Kind = .unknown
 }
@@ -129,4 +130,32 @@ pub mut:
 	// errors           []errors.Error    // all the checker errors in the file
 	// warnings         []errors.Warning  // all the checker warings in the file
 	// generic_fns      []&FnDecl
+}
+
+pub struct StructInit {
+pub:
+	// pos      token.Position
+	is_short bool
+pub mut:
+	unresolved           bool
+	// pre_comments         []Comment
+	typ                  table.Type
+	// update_expr          Expr
+	// update_expr_type     table.Type
+	// update_expr_comments []Comment
+	// has_update_expr      bool
+	fields               []StructInitField
+	// embeds               []StructInitEmbed
+}
+
+pub struct StructInitField {
+pub:
+	expr          Expr
+	// pos           token.Position
+	// comments      []Comment
+	// next_comments []Comment
+pub mut:
+	name          string
+	typ           table.Type
+	expected_type table.Type
 }

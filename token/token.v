@@ -15,6 +15,7 @@ pub mut:
 }
 
 pub enum Kind {
+	unknown
 	name
 	number
 	string
@@ -23,10 +24,10 @@ pub enum Kind {
 	lpar
 	rpar
 	colon
+	dot
 	assign
 	decl_assign
 	eof
-	unknown
 	keyword_beg
 	key_fn
 	key_module
@@ -51,12 +52,14 @@ fn build_token_str() []string {
 	s[Kind.name] = 'name'
 	s[Kind.string] = 'string'
 	s[Kind.number] = 'number'
+	s[Kind.assign] = '='
 	s[Kind.decl_assign] = ':='
 	s[Kind.assign] = '='
 	s[Kind.lcbr] = '{'
 	s[Kind.rcbr] = '}'
 	s[Kind.lpar] = '('
 	s[Kind.rpar] = ')'
+	s[Kind.dot] = '.'
 	s[Kind.colon] = ':'
 	s[Kind.key_fn] = 'fn'
 	s[Kind.key_module] = 'module'

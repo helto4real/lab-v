@@ -1,13 +1,14 @@
-struct Test {
-	number int
-	a_string string
+
+struct MyStructThing {
+	test string
 }
+
 fn main() {
-	x := 'Hello world'
-	y := u64(10)
+	x := 'hello world baby'
+	y := MyStructThing {}
+	y.test = 'this is a cool thing'
+	println('testar')
+	println('Åke har en hund')
 	println(x)
-	println('test')
-	no_leak := 'It is a $x and a $y'
-	println(no_leak)
-	no_leak.free()
+	println(y.test)
 }

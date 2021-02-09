@@ -65,18 +65,20 @@ endif
 
 all: main_cc
 
-compiler:
+main_cc:
+	v ./compiler/compiler.v -o ./v
+
+comp: 
 	$(CC) $(CGEN)/src/default.c -c $(CFLAGS) $(LIBS) -o $(LIB)/default.o
 	chmod 755 $(LIB)/default.o
+
+comp_prod: 
+	$(CC) $(CGEN)/src/default.c -O3 -c $(CFLAGS) $(LIBS) -o $(LIB)/default.o
+	chmod 755 $(LIB)/default.o
+
 clean:
 	rm -f $(LIB)/*.o
 	
-
-main_cc: 
-	v main.v
-	./main
-	$(CC) $(CGEN)/src/main.c $(CFLAGS) $(LIBS) -o ./v $(LIB)/default.o
-	chmod 755 ./v
 .PHONY: clean
 
 
